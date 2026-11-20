@@ -14,6 +14,15 @@ export NEXTCLOUD_HOST=cloud.example.com
 
 The defaults match a standard MASH install: containers `mash-nextcloud-server` and `mash-nextcloud-push`, networks `traefik`, `mash-postgres`, `mash-nextcloud`, and `mash-nextcloud-valkey`, and data under `/mash/nextcloud`. Override `NC_CONTAINER`, `PUSH_CONTAINER`, `NC_DATA`, `VALKEY_RUN`, `TRAEFIK_NETWORK`, `POSTGRES_NETWORK`, `NC_NETWORK`, `VALKEY_NETWORK`, or `NC_SERVICE` if your names differ.
 
+## Other distributions
+
+These scripts were written and tested on Arch. They use POSIX `sh`, Docker, and systemd. They do not call `pacman`. On Debian, Ubuntu, RHEL, Rocky, or Fedora, change the host setup below. The script text stays the same.
+
+- Install and enable Docker with that distribution's packages: `docker-ce` or `docker.io` on Debian and Ubuntu, `docker-ce` on RHEL, Rocky, and Fedora. The service name stays `docker.service`.
+- Run the scripts as a user who can use `sudo` and the `docker` command. Debian and Ubuntu use the `sudo` and `docker` groups. RHEL, Rocky, and Fedora use `wheel` and `docker`.
+- `/usr/local/sbin` and `systemctl` are the same on these distributions. `NC_Client_Fix.sh` installs the unit there.
+- On RHEL, Rocky, and Fedora with SELinux enforcing, add `,z` to both bind mounts in `NC_Client_Create.sh` and in the sync script that `NC_Client_Fix.sh` installs. The mount lines look like `-v "${nc_data}:/var/www/html:ro,z"` and `-v "${valkey_run}:/run-valkey:z"`. Without that label the container cannot read the host files.
+
 ## Install once
 
 On the Nextcloud host, as a user who can run Docker:
