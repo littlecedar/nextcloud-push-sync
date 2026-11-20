@@ -1,0 +1,5 @@
+*.env
+nextcloud-push.env
+nextcloud-push-sync.env
+.DS_Store
+*~
