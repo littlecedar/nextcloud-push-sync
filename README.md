@@ -42,10 +42,10 @@ The hostname used by Fix is saved on the server in `/etc/nextcloud-push-sync.env
 
 ## What the sync does
 
-- Wait until the Nextcloud container has an address on the Traefik network.
-- Set Nextcloud trusted domain index 1 to that address.
-- Recreate the push container only when `NEXTCLOUD_URL` is different.
-- Move the Context Chat `Command` directory aside while `occ` runs, then move it back. Context Chat otherwise makes `occ` fail.
+- Waits until the Nextcloud container has an address on the Traefik network.
+- Sets Nextcloud trusted domain index 1 to that address.
+- Recreates the push container only when `NEXTCLOUD_URL` is different.
+- Moves the Context Chat `Command` directory aside while `occ` runs, then moves it back. Context Chat otherwise makes `occ` fail.
 
 The public URL stays `https://<NEXTCLOUD_HOST>/push`.
 
@@ -65,5 +65,4 @@ A matching address prints `push URL already matches`.
 
 ## Do not commit
 
-Create and Fix copy the live container environment, including database, Redis, and mail secrets, into a temporary file and delete it. Do not leave that file on disk, and do not commit it.
-
+`NC_Client_Create.sh` and `NC_Client_Fix.sh` copy the live container environment, including database, Redis, and mail secrets, into a temporary file and delete it. Do not leave that file on disk, and do not commit it.
