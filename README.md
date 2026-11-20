@@ -4,7 +4,13 @@
 
 # Nextcloud push callback
 
-MASH recreates the Nextcloud server container on start. That container gets a new address on the Traefik network. A separately created push container keeps the old `NEXTCLOUD_URL`, so desktop clients fall back to polling.
+## Issue this fixes
+
+Desktop and web clients keep polling, or the file list keeps refreshing, after the Nextcloud container is restarted. Push notifications never stay connected.
+
+MASH recreates `mash-nextcloud-server` on every start. Docker gives that container a new address on the Traefik network. The push container is created by hand, outside the playbook, and its `NEXTCLOUD_URL` is the old address. Callbacks go to a container that no longer exists. Trusted domain index 1 has to be that same address or the push server cannot call Nextcloud. The public URL, `https://<host>/push`, does not change.
+
+These scripts point the push container at the current address and keep that address updated after the next recreate.
 
 Set the public hostname when you run either script. It is not stored in this repository.
 
@@ -60,3 +66,4 @@ A matching address prints `push URL already matches`.
 ## Do not commit
 
 Create and Fix copy the live container environment, including database, Redis, and mail secrets, into a temporary file and delete it. Do not leave that file on disk, and do not commit it.
+
